@@ -33,9 +33,13 @@ jobs:
       - name: Enforce minimal router contract
         run: |
           set -euo pipefail
-          ! grep -RniE '_restbr/bootstrap|requestWithTenantContext|url\.searchParams\.set\(["'"']tenant|url\.searchParams\.set\(["'"']rid|router_origin|router_base_path|XMLHttpRequest|new Proxy\(' cloudflare
+          ! grep -RniE '_restbr/bootstrap|requestWithTenantContext|router_origin|router_base_path|XMLHttpRequest|new Proxy\(' cloudflare
+          ! grep -RniF "searchParams.set('tenant'" cloudflare
+          ! grep -RniF 'searchParams.set("tenant"' cloudflare
+          ! grep -RniF "searchParams.set('rid'" cloudflare
+          ! grep -RniF 'searchParams.set("rid"' cloudflare
           grep -q "DEFAULT_STATIC_BASE_PATH = '/restbr-gold'" cloudflare/router-core.js
-          grep -q "hostname: \`eq\.\${hostname}\`" cloudflare/restbr-gold-router-v1.js
+          grep -q 'hostname: `eq.${hostname}`' cloudflare/restbr-gold-router-v1.js
           grep -q "is_verified: 'eq.true'" cloudflare/restbr-gold-router-v1.js
 
       - name: Live simulated router path — no deployment
