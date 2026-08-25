@@ -106,15 +106,24 @@
     <div id="smImageCaption"></div>
   </div>
 
-  <div id="restbrDiningGate" class="restbr-dining-backdrop">
-    <div class="restbr-dining-card">
-      <div class="restbr-dining-mark">G</div>
+  <div id="restbrDiningGate" class="sm-dining-gate">
+    <div class="sm-dining-card">
+      <div class="sm-dining-mark">🍽️</div>
       <h2 id="restbrDiningTitle"></h2>
       <p id="restbrDiningText"></p>
-      <div class="restbr-dining-actions">
-        <button id="restbrDineIn" class="primary" type="button"></button>
-        <button id="restbrTakeaway" type="button"></button>
+      <div class="sm-dining-options">
+        <button id="restbrDineIn" class="sm-dining-choice" type="button">
+          <span class="icon">🍴</span>
+          <strong id="restbrDineInLabel"></strong>
+          <small id="restbrDineInSub"></small>
+        </button>
+        <button id="restbrTakeaway" class="sm-dining-choice" type="button">
+          <span class="icon">🥡</span>
+          <strong id="restbrTakeawayLabel"></strong>
+          <small id="restbrTakeawaySub"></small>
+        </button>
       </div>
+      <div id="restbrDiningLoading" class="sm-dining-loading"></div>
     </div>
   </div>
 
