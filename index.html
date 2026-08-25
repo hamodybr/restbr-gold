@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080604">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>RESTBR Gold — Public Parity</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/desktop-phone-parity.css">
+  <link rel="stylesheet" href="css/english-card-ltr.css">
+  <link rel="stylesheet" href="css/mobile-card-image-fix.css">
+  <link rel="stylesheet" href="css/fixture-shell.css">
+</head>
+<body>
+  <video id="smBgVideo" class="sm-bg-video" autoplay muted loop playsinline></video>
+  <div class="sm-bg-overlay"></div>
+
+  <div id="smIntro" class="sm-intro">
+    <div class="sm-intro-logo-wrap">
+      <img src="" alt="" class="sm-intro-logo" style="visibility:hidden">
+    </div>
+    <div class="sm-intro-brand"></div>
+    <div class="sm-intro-sub">MENU</div>
+  </div>
+
+  <main id="smApp" class="sm-app">
+    <header class="sm-header">
+      <div class="sm-logo-wrap">
+        <img src="" alt="" class="sm-logo" style="visibility:hidden">
+      </div>
+      <h1>MENU</h1>
+      <p id="smSubtitle"></p>
+      <div id="smLangs" class="sm-langs"></div>
+      <div id="smActions" class="sm-actions"></div>
+    </header>
+
+    <div class="restbr-fixture-note">RESTBR GOLD · PHASE 1A · LOCAL NEUTRAL FIXTURE · NO SUPABASE · NO REAL RESTAURANT DATA</div>
+    <div id="restbrAnnouncement" class="restbr-announcement"></div>
+
+    <div class="sm-cats-wrap">
+      <div id="smCats" class="sm-cats"></div>
+      <div id="smProgress" class="sm-progress"><span></span></div>
+    </div>
+    <div id="smCatsSentinel"></div>
+
+    <section id="smMenu" class="sm-menu"></section>
+
+    <footer class="sm-footer">
+      <div class="sm-footer-card">
+        <div class="sm-footer-line"></div>
+        <h2></h2>
+        <p class="sm-footer-location"></p>
+        <div class="sm-footer-main-actions">
+          <a id="smFooterLocation" href="#">موقعنا</a>
+          <a id="smFooterCall" href="#">اتصال</a>
+          <a id="smFooterWhatsapp" href="#">WhatsApp</a>
+        </div>
+        <div class="sm-footer-socials">
+          <a id="smFacebook" href="#">Facebook</a>
+          <a id="smSnapchat" href="#">Snapchat</a>
+          <a id="smTikTok" href="#">TikTok</a>
+          <a id="smInstagram" href="#">Instagram</a>
+        </div>
+        <div class="sm-footer-phone"></div>
+        <div class="sm-footer-copy"></div>
+      </div>
+    </footer>
+  </main>
+
+  <button id="smTopBtn" class="sm-top-btn" type="button" aria-label="Back to top">↑</button>
+
+  <button id="smCartFab" class="sm-cart-fab" type="button" aria-label="Cart">🛒</button>
+  <div id="smCartBackdrop" class="sm-cart-backdrop"></div>
+  <aside id="smCartDrawer" class="sm-cart-drawer" aria-label="Cart drawer">
+    <div class="sm-cart-handle"></div>
+    <div class="sm-cart-head">
+      <button id="smCartClear" class="sm-cart-clear" type="button">مسح</button>
+      <h3>السلة</h3>
+      <button id="smCartClose" class="sm-cart-close" type="button">×</button>
+    </div>
+    <div id="smCartItems" class="sm-cart-items"></div>
+    <div class="sm-cart-bottom">
+      <div class="sm-cart-total-row"><span>المجموع</span><b id="smCartTotal">0 IQD</b></div>
+      <button id="smCartContinue" class="sm-cart-continue" type="button">متابعة</button>
+    </div>
+  </aside>
+  <div id="smCartToast" class="sm-cart-toast"></div>
+
+  <div id="smChoiceBackdrop" class="sm-choice-backdrop"></div>
+  <aside id="smChoiceSheet" class="sm-choice-sheet" aria-label="Choose option">
+    <div class="sm-choice-handle"></div>
+    <div class="sm-choice-head">
+      <button id="smChoiceClose" type="button">×</button>
+      <div><small>اختر الحجم / الخيار</small><h3 id="smChoiceTitle"></h3></div>
+    </div>
+    <div id="smChoiceList" class="sm-choice-list"></div>
+  </aside>
+
+  <div id="smImageViewer" class="sm-image-viewer">
+    <button id="smImageViewerClose" type="button">×</button>
+    <img id="smImageViewerImg" alt="">
+    <div id="smImageCaption"></div>
+  </div>
+
+  <div id="restbrDiningGate" class="restbr-dining-backdrop">
+    <div class="restbr-dining-card">
+      <div class="restbr-dining-mark">G</div>
+      <h2 id="restbrDiningTitle"></h2>
+      <p id="restbrDiningText"></p>
+      <div class="restbr-dining-actions">
+        <button id="restbrDineIn" class="primary" type="button"></button>
+        <button id="restbrTakeaway" type="button"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/fixture/public-fixture.js"></script>
+  <script src="src/fixture/public-runtime.js"></script>
+</body>
+</html>
