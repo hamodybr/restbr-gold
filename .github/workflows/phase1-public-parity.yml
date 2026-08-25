@@ -1,0 +1,72 @@
+name: RESTBR Gold Phase 1 Public Parity
+
+on:
+  push:
+    branches:
+      - phase-1-public-parity
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: restbr-gold-pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify pinned Gold CSS byte identity
+        run: |
+          set -euo pipefail
+          test "$(git hash-object css/style.css)" = "de2471d0b54e6c46343b8f8d4df0189fd7f303b2"
+          test "$(git hash-object css/cart.css)" = "da851769af839e270be4d64f13f073569c8b33ed"
+          test "$(git hash-object css/desktop-phone-parity.css)" = "622d5fb01048c8dd14e2d90e6f6ae25a82da9ed2"
+          test "$(git hash-object css/english-card-ltr.css)" = "4b6b488e702d9ec834fdb0d032da0701ac098e20"
+          test "$(git hash-object css/mobile-card-image-fix.css)" = "93cf6dad9aeb53fc7d3a72292aa83cbf1408cb1c"
+          test "$(git hash-object reference/gold-standard/index.html)" = "5db01338e29e02732a4041902c47ab46dcdfad16"
+
+      - name: JavaScript syntax
+        run: |
+          node --check src/fixture/public-fixture.js
+          node --check src/fixture/public-runtime.js
+          node --check src/core/tenant-context.js
+          node --check src/core/tenant-storage.js
+
+      - name: Enforce clean Phase 1 runtime
+        run: |
+          set -euo pipefail
+          ! grep -RniE "supabase|serviceWorker|menu\.json|public-boot-debug|supabase-fallback|tenant-public-isolation|Maximum call stack" index.html src/fixture css/fixture-shell.css
+          ! grep -Rni "pklzxpivnoqnrzyjryqz" index.html src/fixture css/fixture-shell.css
+          ! grep -Rni "07502662002" index.html src/fixture css/fixture-shell.css
+
+      - name: Verify required public shell IDs
+        run: |
+          for id in smIntro smApp smSubtitle smLangs smActions smCats smMenu smFooterLocation smFooterCall smFooterWhatsapp smTopBtn smCartFab smCartDrawer; do
+            grep -q "id=\"$id\"" index.html
+          done
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy preview
+        id: deployment
+        uses: actions/deploy-pages@v4
