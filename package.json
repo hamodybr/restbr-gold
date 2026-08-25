@@ -1,0 +1,11 @@
+{
+  "name": "restbr-gold",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "check:architecture": "node scripts/check-architecture.mjs",
+    "check": "npm run check:architecture && npm test"
+  }
+}
