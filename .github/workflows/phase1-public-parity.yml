@@ -8,12 +8,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: restbr-gold-pages
-  cancel-in-progress: true
 
 jobs:
   validate:
@@ -50,23 +44,3 @@ jobs:
           for id in smIntro smApp smSubtitle smLangs smActions smCats smMenu smFooterLocation smFooterCall smFooterWhatsapp smTopBtn smCartFab smCartDrawer; do
             grep -q "id=\"$id\"" index.html
           done
-
-  deploy:
-    needs: validate
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-      - name: Deploy preview
-        id: deployment
-        uses: actions/deploy-pages@v4
