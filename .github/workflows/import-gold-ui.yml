@@ -1,0 +1,68 @@
+name: Import pinned Gold UI assets
+
+on:
+  push:
+    branches:
+      - phase-1-public-parity
+    paths:
+      - .github/workflows/import-gold-ui.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RESTBR Gold
+        uses: actions/checkout@v4
+        with:
+          ref: phase-1-public-parity
+          fetch-depth: 0
+
+      - name: Checkout pinned SHORASH Gold Standard
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/hamodybr/restbr-menu-app.git /tmp/shorash-gold
+          cd /tmp/shorash-gold
+          git checkout 86a18a57e3684b1d36a1bd9a8470f6a4c9549497 -- \
+            index.html \
+            css/style.css \
+            css/cart.css \
+            css/desktop-phone-parity.css \
+            css/english-card-ltr.css \
+            css/mobile-card-image-fix.css
+
+      - name: Import exact visual assets only
+        run: |
+          set -euo pipefail
+          mkdir -p css reference/gold-standard
+          cp /tmp/shorash-gold/css/style.css css/style.css
+          cp /tmp/shorash-gold/css/cart.css css/cart.css
+          cp /tmp/shorash-gold/css/desktop-phone-parity.css css/desktop-phone-parity.css
+          cp /tmp/shorash-gold/css/english-card-ltr.css css/english-card-ltr.css
+          cp /tmp/shorash-gold/css/mobile-card-image-fix.css css/mobile-card-image-fix.css
+          cp /tmp/shorash-gold/index.html reference/gold-standard/index.html
+
+      - name: Verify byte identity
+        run: |
+          set -euo pipefail
+          cmp css/style.css /tmp/shorash-gold/css/style.css
+          cmp css/cart.css /tmp/shorash-gold/css/cart.css
+          cmp css/desktop-phone-parity.css /tmp/shorash-gold/css/desktop-phone-parity.css
+          cmp css/english-card-ltr.css /tmp/shorash-gold/css/english-card-ltr.css
+          cmp css/mobile-card-image-fix.css /tmp/shorash-gold/css/mobile-card-image-fix.css
+          cmp reference/gold-standard/index.html /tmp/shorash-gold/index.html
+
+      - name: Commit imported Gold assets
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add css reference/gold-standard/index.html
+          if git diff --cached --quiet; then
+            echo "No import changes"
+            exit 0
+          fi
+          git commit -m "Import pinned Gold Standard public visual assets"
+          git push origin HEAD:phase-1-public-parity
