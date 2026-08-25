@@ -177,14 +177,20 @@
     document.title = `${local(settings, 'name')} — Menu`;
 
     const headerLogo = $('.sm-logo');
-    headerLogo.style.display = 'none';
+    if (headerLogo) {
+      headerLogo.removeAttribute('src');
+      headerLogo.style.display = 'none';
+    }
     const headerWrap = $('.sm-logo-wrap');
-    headerWrap.classList.add('restbr-logo-placeholder');
-    headerWrap.textContent = 'G';
+    if (headerWrap) headerWrap.classList.add('restbr-logo-placeholder');
+
+    const introLogo = $('.sm-intro-logo');
+    if (introLogo) {
+      introLogo.removeAttribute('src');
+      introLogo.style.display = 'none';
+    }
     const introWrap = $('.sm-intro-logo-wrap');
-    introWrap.classList.add('restbr-logo-placeholder');
-    introWrap.textContent = 'G';
-    $('.sm-intro-logo').style.display = 'none';
+    if (introWrap) introWrap.classList.add('restbr-logo-placeholder');
 
     renderLanguages();
 

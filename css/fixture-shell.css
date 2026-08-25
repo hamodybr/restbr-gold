@@ -1,5 +1,6 @@
 .restbr-fixture-note{width:94%;max-width:680px;margin:0 auto 10px;padding:8px 10px;border:1px solid rgba(225,177,92,.26);border-radius:12px;background:rgba(10,8,6,.58);color:#bcae9b;font-size:10px;text-align:center;backdrop-filter:blur(8px)}
 .restbr-logo-placeholder{display:grid!important;place-items:center;background:radial-gradient(circle at 35% 30%,#eac36f,#70471e)!important;color:#120c05!important;font-size:28px!important;font-weight:1000!important;letter-spacing:0!important}
+.restbr-logo-placeholder{position:relative!important;overflow:hidden!important}.restbr-logo-placeholder>img{display:none!important}.restbr-logo-placeholder::after{content:"G";display:grid;place-items:center;position:absolute;inset:0;color:#120c05;font-size:28px;font-weight:1000;line-height:1}
 .restbr-sale-pill{display:inline-flex;align-items:center;padding:2px 5px;margin-inline-start:4px;border-radius:999px;background:#215e38;color:#d9ffe8;font-size:8px;font-weight:900}
 
 /* Gold Standard header tools / search / language menu / announcement. */
