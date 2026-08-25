@@ -1,9 +1,9 @@
 import { resolveTenantContext } from '../core/tenant-context.js';
 import { createRestaurantRepository } from '../data/restaurant-repository.js';
 import { fixtureAdapter } from '../data/adapters/fixture-adapter.js';
+import { supabaseRestAdapter } from '../data/adapters/supabase-rest-adapter.js';
 import { applyRestaurantBackgroundVideo } from '../ui/background-video.js';
-
-const repository = createRestaurantRepository({ adapter: fixtureAdapter });
+import { selectPublicAdapter } from './public-adapter-selector.js';
 
 function showBootFailure(error) {
   console.error('RESTBR_PUBLIC_BOOT_FAILED', error);
@@ -22,6 +22,14 @@ function showBootFailure(error) {
 }
 
 async function bootPublicMenu() {
+  const adapter = selectPublicAdapter({
+    hostname: window.location.hostname,
+    fixtureAdapter,
+    productionAdapter: supabaseRestAdapter
+  });
+
+  const repository = createRestaurantRepository({ adapter });
+
   const tenant = await resolveTenantContext({
     hostname: window.location.hostname,
     search: window.location.search,
