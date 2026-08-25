@@ -1,11 +1,11 @@
 window.RESTBR_GOLD_FIXTURE = Object.freeze({
   settings: {
-    name_ar: 'مطعم الاختبار الذهبي',
-    name_ku: 'رێستورانتا تاقیکرنا زێڕین',
-    name_en: 'GOLD TEST RESTAURANT',
-    subtitle_ar: 'نسخة اختبار محايدة — بدون بيانات مطعم حقيقي',
-    subtitle_ku: 'ڤێرژەنا تاقیکرنێ — بێ داتای رێستورانەکا ڕاستەقینە',
-    subtitle_en: 'Neutral parity fixture — no real restaurant data',
+    name_ar: 'مطعم الاختيار الذهبي',
+    name_ku: 'رێستورانتا هەلبژارتنا زێڕین',
+    name_en: 'GOLD CHOICE RESTAURANT',
+    subtitle_ar: 'أهلاً وسهلاً بكم',
+    subtitle_ku: 'ب خێر هاتن',
+    subtitle_en: 'Welcome',
     phone: '+9647500000000',
     whatsapp: '+9647500000000',
     currency: 'IQD',
@@ -13,9 +13,9 @@ window.RESTBR_GOLD_FIXTURE = Object.freeze({
     address_ar: 'دهوك • كوردستان',
     address_ku: 'دهۆك • كوردستان',
     address_en: 'Duhok • Kurdistan',
-    announcement_ar: 'هذه بيانات تجريبية فقط لفحص تطابق الواجهة.',
-    announcement_ku: 'ئه‌ڤه‌ بتنێ داتای تاقیکرنێ یە بۆ پشکنینا وێنەیێ.',
-    announcement_en: 'Fixture data only for visual parity testing.'
+    announcement_ar: 'أهلاً بكم — نتمنى لكم وجبة شهية.',
+    announcement_ku: 'ب خێر هاتن — خوارنەکا خۆش بۆ هەوە.',
+    announcement_en: 'Welcome — we hope you enjoy your meal.'
   },
   categories: [
     { id: 'cat-grill', slug: 'grill', name_ar: 'المشاوي', name_ku: 'برژاندی', name_en: 'Grill', effect: 'sm-grill-card', sort_order: 1 },
@@ -25,7 +25,7 @@ window.RESTBR_GOLD_FIXTURE = Object.freeze({
   products: [
     {
       id: 'prod-chicken', category_id: 'cat-grill', sort_order: 1, badge: 'popular',
-      name_ar: 'دجاج ذهبي تجريبي', name_ku: 'مریشکێ زێڕین یێ تاقیکرنێ', name_en: 'Gold Test Chicken',
+      name_ar: 'دجاج ذهبي', name_ku: 'مریشکێ زێڕین', name_en: 'Gold Chicken',
       options: [
         { id: 'opt-chicken-regular', name_ar: 'عادي', name_ku: 'ئاسایی', name_en: 'Regular', price: 10000, takeaway_price: 11000 },
         { id: 'opt-chicken-family', name_ar: 'عائلي', name_ku: 'خێزانی', name_en: 'Family', price: 18000, takeaway_price: 20000 }
@@ -33,14 +33,14 @@ window.RESTBR_GOLD_FIXTURE = Object.freeze({
     },
     {
       id: 'prod-burger', category_id: 'cat-western', sort_order: 1, badge: 'hot',
-      name_ar: 'بركر الاختبار', name_ku: 'بەرگەرێ تاقیکرنێ', name_en: 'Test Burger',
+      name_ar: 'بركر ذهبي', name_ku: 'بەرگەرێ زێڕین', name_en: 'Gold Burger',
       options: [
         { id: 'opt-burger', name_ar: 'وجبة', name_ku: 'ژەم', name_en: 'Meal', price: 7000, takeaway_price: 7500 }
       ]
     },
     {
       id: 'prod-coffee', category_id: 'cat-drinks', sort_order: 1,
-      name_ar: 'آيس كوفي تجريبي', name_ku: 'ئایس کۆفی یێ تاقیکرنێ', name_en: 'Test Iced Coffee',
+      name_ar: 'آيس كوفي', name_ku: 'ئایس کۆفی', name_en: 'Iced Coffee',
       options: [
         { id: 'opt-coffee-medium', name_ar: 'وسط', name_ku: 'ناڤنجی', name_en: 'Medium', price: 4000, takeaway_price: 4500 },
         { id: 'opt-coffee-large', name_ar: 'كبير', name_ku: 'مەزن', name_en: 'Large', price: 5000, takeaway_price: 5500 }
@@ -48,7 +48,7 @@ window.RESTBR_GOLD_FIXTURE = Object.freeze({
     },
     {
       id: 'prod-mojito', category_id: 'cat-drinks', sort_order: 2,
-      name_ar: 'موهيتو تجريبي', name_ku: 'مۆهیتۆ یێ تاقیکرنێ', name_en: 'Test Mojito',
+      name_ar: 'موهيتو', name_ku: 'مۆهیتۆ', name_en: 'Mojito',
       options: [
         { id: 'opt-mojito', name_ar: 'عادي', name_ku: 'ئاسایی', name_en: 'Regular', price: 4500, takeaway_price: 5000 }
       ]
