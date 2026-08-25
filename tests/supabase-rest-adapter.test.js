@@ -41,9 +41,9 @@ test('subdomain resolution requires exact verified active domain', async () => {
 
   assert.deepEqual(tenant, { restaurantId: 'r1', slug: 'coffee' });
   assert.match(seen[0], /restaurant_domains/);
-  assert.match(seen[0], /hostname=eq%2Ecoffee%2Erestbr%2Ecom/);
-  assert.match(seen[0], /status=eq%2Eactive/);
-  assert.match(seen[0], /is_verified=eq%2Etrue/);
+  assert.match(seen[0], /hostname=eq\.coffee\.restbr\.com/);
+  assert.match(seen[0], /status=eq\.active/);
+  assert.match(seen[0], /is_verified=eq\.true/);
 });
 
 test('every public menu table request carries explicit restaurant_id scope', async () => {
