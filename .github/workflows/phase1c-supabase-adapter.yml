@@ -1,0 +1,41 @@
+name: RESTBR Gold Phase 1C Supabase Adapter
+
+on:
+  push:
+    branches:
+      - phase-1c-supabase-adapter
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run architecture and unit tests
+        run: npm run check
+
+      - name: Verify Supabase adapter syntax
+        run: |
+          node --check src/config/platform.js
+          node --check src/data/adapters/supabase-rest-adapter.js
+          node --check tests/supabase-rest-adapter.test.js
+          node --check scripts/check-live-yourcoffee.mjs
+
+      - name: Enforce clean adapter architecture
+        run: |
+          set -euo pipefail
+          ! grep -RniE 'new Proxy\(|XMLHttpRequest|serviceWorker|menu\.json|supabase-fallback|public-boot-debug|tenant-public-isolation' src/data/adapters/supabase-rest-adapter.js src/config/platform.js
+          ! grep -RniE 'service[_-]?role' src/config/platform.js src/data/adapters/supabase-rest-adapter.js
+          grep -q "restaurant_id: \`eq\.\${restaurantId}\`" src/data/adapters/supabase-rest-adapter.js
+          grep -q "hostname: \`eq\.\${hostname}\`" src/data/adapters/supabase-rest-adapter.js
+
+      - name: Live anon integration — YourCoffee
+        run: node scripts/check-live-yourcoffee.mjs
