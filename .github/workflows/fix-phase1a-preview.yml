@@ -2,7 +2,8 @@ name: One-time Phase 1A preview boot fix
 
 on:
   push:
-    branches: [phase-1-public-parity]
+    branches:
+      - phase-1-public-parity
     paths:
       - .github/workflows/fix-phase1a-preview.yml
 
@@ -18,50 +19,8 @@ jobs:
           ref: phase-1-public-parity
           fetch-depth: 0
 
-      - name: Patch preview boot crash safely
-        shell: python
-        run: |
-          from pathlib import Path
-
-          runtime = Path('src/fixture/public-runtime.js')
-          text = runtime.read_text()
-          old = """    const headerLogo = $('.sm-logo');
-    headerLogo.style.display = 'none';
-    const headerWrap = $('.sm-logo-wrap');
-    headerWrap.classList.add('restbr-logo-placeholder');
-    headerWrap.textContent = 'G';
-    const introWrap = $('.sm-intro-logo-wrap');
-    introWrap.classList.add('restbr-logo-placeholder');
-    introWrap.textContent = 'G';
-    $('.sm-intro-logo').style.display = 'none';
-"""
-          new = """    const headerLogo = $('.sm-logo');
-    if (headerLogo) {
-      headerLogo.removeAttribute('src');
-      headerLogo.style.display = 'none';
-    }
-    const headerWrap = $('.sm-logo-wrap');
-    if (headerWrap) headerWrap.classList.add('restbr-logo-placeholder');
-
-    const introLogo = $('.sm-intro-logo');
-    if (introLogo) {
-      introLogo.removeAttribute('src');
-      introLogo.style.display = 'none';
-    }
-    const introWrap = $('.sm-intro-logo-wrap');
-    if (introWrap) introWrap.classList.add('restbr-logo-placeholder');
-"""
-          if old not in text:
-              raise SystemExit('Expected renderHeader block not found; refusing unsafe patch')
-          runtime.write_text(text.replace(old, new, 1))
-
-          css = Path('css/fixture-shell.css')
-          css_text = css.read_text()
-          old_css = ".restbr-logo-placeholder{display:grid!important;place-items:center;background:radial-gradient(circle at 35% 30%,#eac36f,#70471e)!important;color:#120c05!important;font-size:28px!important;font-weight:1000!important;letter-spacing:0!important}"
-          new_css = old_css + "\n.restbr-logo-placeholder{position:relative!important;overflow:hidden!important}.restbr-logo-placeholder>img{display:none!important}.restbr-logo-placeholder::after{content:\"G\";display:grid;place-items:center;position:absolute;inset:0;color:#120c05;font-size:28px;font-weight:1000;line-height:1}"
-          if old_css not in css_text:
-              raise SystemExit('Expected placeholder CSS not found; refusing unsafe patch')
-          css.write_text(css_text.replace(old_css, new_css, 1))
+      - name: Apply guarded patch
+        run: python scripts/fix-phase1a-preview.py
 
       - name: Verify syntax and regression
         run: |
@@ -72,11 +31,11 @@ jobs:
           ! grep -q "headerWrap.textContent = 'G'" src/fixture/public-runtime.js
           ! grep -q "introWrap.textContent = 'G'" src/fixture/public-runtime.js
 
-      - name: Commit fix and remove one-time workflow
+      - name: Commit fix and clean temporary patch files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/fix-phase1a-preview.yml
+          git rm .github/workflows/fix-phase1a-preview.yml scripts/fix-phase1a-preview.py
           git add src/fixture/public-runtime.js css/fixture-shell.css
           git commit -m "Fix Phase 1A preview boot and dining copy"
           git push origin HEAD:phase-1-public-parity
