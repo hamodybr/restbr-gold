@@ -1,0 +1,42 @@
+name: RESTBR Gold Phase 1E Router Serving
+
+on:
+  push:
+    branches:
+      - phase-1e-router-serving
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run architecture and tests
+        run: npm run check
+
+      - name: Verify router syntax
+        run: |
+          node --check cloudflare/router-core.js
+          node --check cloudflare/restbr-gold-router-v1.js
+          node --check tests/router-core.test.js
+          node --check tests/router-worker.test.js
+          node --check scripts/check-live-gold-router.mjs
+
+      - name: Enforce minimal router contract
+        run: |
+          set -euo pipefail
+          ! grep -RniE '_restbr/bootstrap|requestWithTenantContext|url\.searchParams\.set\(["'"']tenant|url\.searchParams\.set\(["'"']rid|router_origin|router_base_path|XMLHttpRequest|new Proxy\(' cloudflare
+          grep -q "DEFAULT_STATIC_BASE_PATH = '/restbr-gold'" cloudflare/router-core.js
+          grep -q "hostname: \`eq\.\${hostname}\`" cloudflare/restbr-gold-router-v1.js
+          grep -q "is_verified: 'eq.true'" cloudflare/restbr-gold-router-v1.js
+
+      - name: Live simulated router path — no deployment
+        run: node scripts/check-live-gold-router.mjs
