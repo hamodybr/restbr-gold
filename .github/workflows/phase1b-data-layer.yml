@@ -1,0 +1,54 @@
+name: RESTBR Gold Phase 1B Data Layer
+
+on:
+  push:
+    branches:
+      - phase-1b-data-layer
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run architecture and isolation tests
+        run: npm run check
+
+      - name: Verify module syntax
+        run: |
+          node --check src/config/defaults.js
+          node --check src/data/public-menu-model.js
+          node --check src/data/restaurant-repository.js
+          node --check src/data/adapters/fixture-adapter.js
+          node --check src/bootstrap/public-bootstrap.js
+          node --check src/ui/background-video.js
+          node --check src/fixture/public-fixture-data.js
+          node --check src/fixture/public-runtime.js
+
+      - name: Verify pinned Gold CSS identity
+        run: |
+          set -euo pipefail
+          test "$(git hash-object css/style.css)" = "de2471d0b54e6c46343b8f8d4df0189fd7f303b2"
+          test "$(git hash-object css/cart.css)" = "da851769af839e270be4d64f13f073569c8b33ed"
+          test "$(git hash-object css/desktop-phone-parity.css)" = "622d5fb01048c8dd14e2d90e6f6ae25a82da9ed2"
+          test "$(git hash-object css/english-card-ltr.css)" = "4b6b488e702d9ec834fdb0d032da0701ac098e20"
+          test "$(git hash-object css/mobile-card-image-fix.css)" = "93cf6dad9aeb53fc7d3a72292aa83cbf1408cb1c"
+
+      - name: Enforce one clean public boot path
+        run: |
+          set -euo pipefail
+          grep -q 'type="module" src="src/bootstrap/public-bootstrap.js"' index.html
+          ! grep -q 'src/fixture/public-fixture.js' index.html
+          test ! -e src/fixture/public-fixture.js
+          ! grep -RniE 'serviceWorker|menu\.json|public-boot-debug|supabase-fallback|tenant-public-isolation|new Proxy\(' src/data src/bootstrap src/ui
+
+      - name: Verify canonical default background video
+        run: grep -q 'https://github.com/hamodybr/-shorash-assets/raw/refs/heads/main/shorash-bg.MP4' src/config/defaults.js
