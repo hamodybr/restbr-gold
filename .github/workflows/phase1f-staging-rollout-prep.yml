@@ -1,0 +1,39 @@
+name: RESTBR Gold Phase 1F Staging Rollout Prep
+
+on:
+  push:
+    branches:
+      - phase-1f-staging-rollout-prep
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run architecture and tests
+        run: npm run check
+
+      - name: Verify standalone router syntax
+        run: node --check cloudflare/restbr-gold-router-v1-standalone.js
+
+      - name: Enforce standalone staging contract
+        run: |
+          set -euo pipefail
+          grep -q "const ROUTER_VERSION = 'gold-v1'" cloudflare/restbr-gold-router-v1-standalone.js
+          grep -q "const DEFAULT_STATIC_BASE_PATH = '/restbr-gold'" cloudflare/restbr-gold-router-v1-standalone.js
+          grep -q 'hostname: `eq.${hostname}`' cloudflare/restbr-gold-router-v1-standalone.js
+          grep -q "is_verified: 'eq.true'" cloudflare/restbr-gold-router-v1-standalone.js
+          ! grep -niE '_restbr/bootstrap|requestWithTenantContext|router_origin|router_base_path|XMLHttpRequest|new Proxy\(' cloudflare/restbr-gold-router-v1-standalone.js
+          ! grep -niF "searchParams.set('tenant'" cloudflare/restbr-gold-router-v1-standalone.js
+          ! grep -niF 'searchParams.set("tenant"' cloudflare/restbr-gold-router-v1-standalone.js
+          ! grep -niF "searchParams.set('rid'" cloudflare/restbr-gold-router-v1-standalone.js
+          ! grep -niF 'searchParams.set("rid"' cloudflare/restbr-gold-router-v1-standalone.js
