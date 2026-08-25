@@ -1,0 +1,41 @@
+name: RESTBR Gold Phase 1D Production Binding
+
+on:
+  push:
+    branches:
+      - phase-1d-production-binding
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run architecture and unit tests
+        run: npm run check
+
+      - name: Verify production binding syntax
+        run: |
+          node --check src/bootstrap/public-adapter-selector.js
+          node --check src/bootstrap/public-bootstrap.js
+          node --check tests/public-adapter-selector.test.js
+          node --check scripts/check-live-production-binding.mjs
+
+      - name: Enforce hostname-only production binding
+        run: |
+          set -euo pipefail
+          ! grep -RniE '[?&]rid=|restaurant_id=' src/bootstrap src/core/tenant-context.js
+          ! grep -RniE 'XMLHttpRequest|new Proxy\(|serviceWorker|supabase-fallback|tenant-public-isolation' src/bootstrap
+          grep -q "hamodybr.github.io" src/bootstrap/public-adapter-selector.js
+          grep -q "productionAdapter: supabaseRestAdapter" src/bootstrap/public-bootstrap.js
+
+      - name: Live production hostname path — YourCoffee
+        run: node scripts/check-live-production-binding.mjs
